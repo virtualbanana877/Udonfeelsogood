@@ -4,6 +4,13 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>うどん気持ちいいゲーム</title>
+<meta name="description" content="ピンクのカバが気持ちいい瞬間にボタンを押せ!0.5秒のタイミングゲーム">
+<meta property="og:type" content="website">
+<meta property="og:title" content="うどん気持ちいいゲーム">
+<meta property="og:description" content="ピンクのカバが気持ちいい瞬間にボタンを押せ!0.5秒のタイミングゲーム">
+<meta property="og:url" content="https://virtualbanana877.github.io/Udonfeelsogood/">
+<meta property="og:image" content="https://virtualbanana877.github.io/Udonfeelsogood/ogp.png">
+<meta name="twitter:card" content="summary_large_image">
 <style>
 :root{
   color-scheme:light;
@@ -75,12 +82,12 @@ button.x{background:#111;box-shadow:0 6px 0 #444}
 
 <section id="s1" class="screen">
   <h1>🍜 うどん気持ちいいゲーム 🍜</h1>
-  <p class="sub">カバが「気持ちいい」瞬間にボタンを押そう!</p>
-  <p class="sub">※このゲームはファンメイドの二次創作ゲームです</p>
+  <p class="sub">ピンクのカバが「気持ちいい」瞬間にボタンを押そう!</p>
+  <p class="sub">※このゲームはファンメイドの二次創作です</p>
   <label for="name">貴方の名前</label>
   <input id="name" maxlength="20" placeholder="例:エリカ" autocomplete="off">
   <label for="fav">好きなもの</label>
-  <input id="fav" maxlength="20" placeholder="例:おっぱい" autocomplete="off">
+  <input id="fav" maxlength="20" placeholder="例:うどん" autocomplete="off">
   <p class="hint" id="hint"></p>
   <button id="start">スタート</button>
 </section>
@@ -137,7 +144,7 @@ button.x{background:#111;box-shadow:0 6px 0 #444}
 <script>
 (function(){
   var $=function(i){return document.getElementById(i)};
-  var name="",fav="",timer=null,on=false,over=false,postText="";
+  var BASE="https://virtualbanana877.github.io/Udonfeelsogood/";var name="",fav="",timer=null,on=false,over=false,postText="";
 
   function show(id){
     ["s1","s2","s3"].forEach(function(s){$(s).hidden=(s!==id)});
@@ -197,7 +204,7 @@ button.x{background:#111;box-shadow:0 6px 0 #444}
     var r=$("res");
     r.textContent=result;
     r.className="res"+(ok?"":" ng");
-    postText="My name is "+name+"\nDo you like "+fav+"?\nMy name is "+fav+" My name is "+fav+" chu☆\nあぁん…❤"+result;
+    postText="My name is "+name+"\nDo you like "+fav+"?\nMy name is "+fav+" My name is "+fav+" chu☆\nあぁん…❤"+result+"\n"+BASE+(ok?"ok.html":"ng.html");
     $("preview").textContent=postText;
     show("s3");
   }
