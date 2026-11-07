@@ -207,6 +207,9 @@ button.x{background:#111;box-shadow:0 6px 0 #444}
     postText="My name is "+name+"\nDo you like "+fav+"?\nMy name is "+fav+" My name is "+fav+" chu☆\nあぁん…❤"+result+"\n"+BASE+(ok?"ok.html":"ng.html");
     $("preview").textContent=postText;
     show("s3");
+    var s3=$("s3");
+    s3.style.pointerEvents="none";
+    setTimeout(function(){s3.style.pointerEvents=""},900);
   }
 
   function post(){
