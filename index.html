@@ -201,14 +201,14 @@ button.x{background:#111;box-shadow:0 6px 0 #444}
     clearTimeout(timer);
     var ok=on;
     setPleasure(false);
-    var result=ok?"うどん気持ちいい":"気持ちよくない";
+    var result=ok?"❤うどん気持ちいい…❤":"うどん気持ちよくない…";
     lastImg=ok?"ogp-ok.png":"ogp-ng.png";
     $("face").src=lastImg;
     $("note").textContent="";
     var r=$("res");
     r.textContent=result;
     r.className="res"+(ok?"":" ng");
-    postText="My name is "+name+"\nDo you like "+fav+"?\nMy name is "+fav+" My name is "+fav+" chu☆\nあぁん…❤"+result+"\n"+BASE;
+    postText="My name is "+name+"\nDo you like "+fav+"?\nMy name is "+fav+" My name is "+fav+" chu☆\nあぁん…"+result+"\n"+BASE;
     $("preview").textContent=postText;
     show("s3");
     var s3=$("s3");
