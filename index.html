@@ -71,7 +71,7 @@ button.x{background:#111;box-shadow:0 6px 0 #444}
 .say{height:34px;font-size:22px;font-weight:bold;color:var(--accent);margin:6px 0 0}
 .heart{position:absolute;font-size:28px;pointer-events:none;animation:fly 1s ease-out forwards}
 @keyframes fly{from{opacity:1;transform:translateY(0)}to{opacity:0;transform:translateY(-110px)}}
-.big{font-size:64px;margin:6px 0}
+.face{display:block;width:100%;max-width:360px;height:auto;border-radius:16px;margin:0 auto 8px}
 .res{font-size:28px;font-weight:bold;color:var(--accent);margin:6px 0 16px}
 .res.ng{color:#8e7cff}
 .preview{background:var(--stage);color:#5a2a45;border-radius:16px;padding:10px 12px;font-size:13px;text-align:left;
@@ -134,17 +134,19 @@ button.x{background:#111;box-shadow:0 6px 0 #444}
 </section>
 
 <section id="s3" class="screen" hidden>
-  <div class="big" id="face"></div>
+  <img id="face" class="face" alt="">
   <div class="res" id="res"></div>
   <div class="preview" id="preview"></div>
   <button class="x" id="post">Xにポストする</button>
+  <button id="postImg">画像つきでXにポスト(スマホ)</button>
+  <p class="hint" id="note"></p>
   <button class="sec" id="retry">もう一回あそぶ</button>
 </section>
 
 <script>
 (function(){
   var $=function(i){return document.getElementById(i)};
-  var BASE="https://virtualbanana877.github.io/Udonfeelsogood/";var name="",fav="",timer=null,on=false,over=false,postText="";
+  var lastImg="";var BASE="https://virtualbanana877.github.io/Udonfeelsogood/";var name="",fav="",timer=null,on=false,over=false,postText="";
 
   function show(id){
     ["s1","s2","s3"].forEach(function(s){$(s).hidden=(s!==id)});
@@ -200,11 +202,13 @@ button.x{background:#111;box-shadow:0 6px 0 #444}
     var ok=on;
     setPleasure(false);
     var result=ok?"うどん気持ちいい":"気持ちよくない";
-    $("face").textContent=ok?"🦛💖":"🦛💦";
+    lastImg=ok?"ogp-ok.png":"ogp-ng.png";
+    $("face").src=lastImg;
+    $("note").textContent="";
     var r=$("res");
     r.textContent=result;
     r.className="res"+(ok?"":" ng");
-    postText="My name is "+name+"\nDo you like "+fav+"?\nMy name is "+fav+" My name is "+fav+" chu☆\nあぁん…❤"+result+"\n"+BASE+(ok?"ok.html":"ng.html");
+    postText="My name is "+name+"\nDo you like "+fav+"?\nMy name is "+fav+" My name is "+fav+" chu☆\nあぁん…❤"+result+"\n"+BASE;
     $("preview").textContent=postText;
     show("s3");
     var s3=$("s3");
@@ -219,9 +223,24 @@ button.x{background:#111;box-shadow:0 6px 0 #444}
     document.body.appendChild(a);a.click();a.remove();
   }
 
+  function postImg(){
+    fetch(lastImg).then(function(r){return r.blob()}).then(function(b){
+      var f=new File([b],"udon.png",{type:"image/png"});
+      if(navigator.canShare&&navigator.canShare({files:[f]})){
+        return navigator.share({files:[f],text:postText}).catch(function(){});
+      }
+      var a=document.createElement("a");
+      a.href=URL.createObjectURL(b);a.download="udon.png";
+      document.body.appendChild(a);a.click();a.remove();
+      $("note").textContent="この端末は画像の直接共有に未対応なので、画像を保存しました。Xの投稿画面で添付してね";
+      post();
+    }).catch(function(){$("note").textContent="画像を読み込めませんでした"});
+  }
+
   $("start").addEventListener("click",startGame);
   $("press").addEventListener("pointerdown",function(e){e.preventDefault();press()});
   $("post").addEventListener("click",post);
+  $("postImg").addEventListener("click",postImg);
   $("retry").addEventListener("click",function(){show("s1")});
 })();
 </script>
