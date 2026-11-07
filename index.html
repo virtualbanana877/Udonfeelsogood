@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>うどん気持ちいいゲーム</title>
+<style>
+:root{
+  color-scheme:light;
+  --bg:#fff0f6; --card:#ffffff; --ink:#5a2a45; --accent:#ff5fa2; --accent2:#ffb3d1; --stage:#ffe3f0; --hot:#fff2a8;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px); padding-bottom:env(safe-area-inset-bottom,0px);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    color-scheme:dark;
+    --bg:#2a1220; --card:#3b1b2e; --ink:#ffe3f0; --accent:#ff6fae; --accent2:#7a3555; --stage:#ffe3f0; --hot:#fff2a8;
+  }
+}
+*{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;min-height:100vh;background:var(--bg);color:var(--ink);
+  font-family:"Hiragino Maru Gothic ProN","Yu Gothic",system-ui,sans-serif;
+  display:flex;justify-content:center;align-items:center;padding:16px}
+.screen{width:100%;max-width:420px;background:var(--card);border-radius:28px;padding:24px 20px;
+  text-align:center;box-shadow:0 8px 0 var(--accent2)}
+.screen[hidden]{display:none}
+h1{margin:0 0 6px;font-size:26px;color:var(--accent)}
+.sub{margin:0 0 18px;font-size:14px;opacity:.8}
+label{display:block;text-align:left;font-weight:bold;margin:12px 0 4px}
+input{width:100%;font-size:18px;padding:12px 14px;border:3px solid var(--accent2);border-radius:16px;
+  background:var(--card);color:var(--ink);outline:none}
+input:focus{border-color:var(--accent)}
+.hint{color:var(--accent);font-size:13px;min-height:18px;margin:8px 0 0}
+button{font:inherit;font-weight:bold;font-size:22px;color:#fff;background:var(--accent);border:none;
+  border-radius:999px;padding:16px 32px;width:100%;margin-top:14px;box-shadow:0 6px 0 #d63d82;
+  cursor:pointer;touch-action:manipulation}
+button:active{transform:translateY(4px);box-shadow:0 2px 0 #d63d82}
+button.sec{background:#8e7cff;box-shadow:0 6px 0 #6a58d6}
+button.x{background:#111;box-shadow:0 6px 0 #444}
+
+.stage{background:var(--stage);border-radius:24px;padding:10px 0 4px;margin-bottom:6px;overflow:hidden;
+  transition:background .1s;position:relative}
+.stage.hot{background:var(--hot)}
+.hippo{--h1:#ff9ec8;--h2:#ffc9e0;--h3:#ff8fbd;width:100%;max-width:270px;margin:0 auto;
+  animation:bob 1s ease-in-out infinite}
+.hippo.pleasure{--h1:#ff7ab0;--h2:#ffb3d6;--h3:#ff6f9f;animation:wild .22s ease-in-out infinite alternate}
+@keyframes bob{0%,100%{transform:translateY(0) scale(1,1)}50%{transform:translateY(4px) scale(1.02,.98)}}
+@keyframes wild{from{transform:scale(1.14) rotate(-5deg)}to{transform:scale(1.2) rotate(5deg) translateY(-4px)}}
+.hippo svg{display:block;width:100%;height:auto;overflow:visible}
+.c1{fill:var(--h1)}.c2{fill:var(--h2)}.c3{fill:var(--h3)}
+.arm,.mouth,.eyes-h{transform-box:view-box}
+.arm{transform-origin:240px 230px;animation:eat .9s ease-in-out infinite}
+@keyframes eat{0%,100%{transform:rotate(4deg)}50%{transform:rotate(-9deg)}}
+.pleasure .arm{animation:none;transform:rotate(-6deg)}
+.mouth{transform-origin:155px 160px;animation:chew .45s ease-in-out infinite}
+@keyframes chew{0%,100%{transform:scale(1,.6)}50%{transform:scale(1,1.5)}}
+.pleasure .mouth{animation:none;transform:scale(1.35,1.9)}
+.eyes-h,.tongue,.fx,.blush{display:none}
+.pleasure .eyes-h,.pleasure .tongue,.pleasure .fx,.pleasure .blush{display:inline}
+.pleasure .eyes-n{display:none}
+.eyes-h{transform-origin:155px 76px;animation:beat .22s ease-in-out infinite alternate}
+@keyframes beat{from{transform:scale(.9)}to{transform:scale(1.15)}}
+.say{height:34px;font-size:22px;font-weight:bold;color:var(--accent);margin:6px 0 0}
+.heart{position:absolute;font-size:28px;pointer-events:none;animation:fly 1s ease-out forwards}
+@keyframes fly{from{opacity:1;transform:translateY(0)}to{opacity:0;transform:translateY(-110px)}}
+.big{font-size:64px;margin:6px 0}
+.res{font-size:28px;font-weight:bold;color:var(--accent);margin:6px 0 16px}
+.res.ng{color:#8e7cff}
+.preview{background:var(--stage);color:#5a2a45;border-radius:16px;padding:10px 12px;font-size:13px;text-align:left;
+  white-space:pre-wrap;word-break:break-word;margin-bottom:6px}
+</style>
+</head>
+<body>
+
+<section id="s1" class="screen">
+  <h1>🍜 うどん気持ちいいゲーム 🍜</h1>
+  <p class="sub">カバが「気持ちいい」瞬間にボタンを押そう!</p>
+  <p class="sub">※このゲームはファンメイドの二次創作ゲームです</p>
+  <label for="name">貴方の名前</label>
+  <input id="name" maxlength="20" placeholder="例:エリカ" autocomplete="off">
+  <label for="fav">好きなもの</label>
+  <input id="fav" maxlength="20" placeholder="例:おっぱい" autocomplete="off">
+  <p class="hint" id="hint"></p>
+  <button id="start">スタート</button>
+</section>
+
+<section id="s2" class="screen" hidden>
+  <div class="stage" id="stage">
+    <div class="hippo" id="hippo">
+      <svg viewBox="0 0 310 305" aria-label="うどんを食べるカバ">
+        <ellipse class="c3" cx="80" cy="292" rx="22" ry="9"/><ellipse class="c3" cx="230" cy="292" rx="22" ry="9"/>
+        <ellipse class="c1" cx="155" cy="240" rx="100" ry="52"/>
+        <ellipse class="c2" cx="155" cy="250" rx="64" ry="34"/>
+        <circle class="c3" cx="90" cy="62" r="11"/><circle class="c3" cx="220" cy="62" r="11"/>
+        <ellipse class="c1" cx="155" cy="118" rx="92" ry="58"/>
+        <circle class="c1" cx="118" cy="76" r="21"/><circle class="c1" cx="192" cy="76" r="21"/>
+        <circle cx="118" cy="76" r="16" fill="#fff" stroke="#4a2a5a" stroke-width="3"/>
+        <circle cx="192" cy="76" r="16" fill="#fff" stroke="#4a2a5a" stroke-width="3"/>
+        <line x1="134" y1="76" x2="176" y2="76" stroke="#4a2a5a" stroke-width="3"/>
+        <g class="eyes-n"><circle cx="121" cy="79" r="5" fill="#2a1535"/><circle cx="189" cy="79" r="5" fill="#2a1535"/></g>
+        <g class="eyes-h" fill="#ff2d6f">
+          <path d="M118 87 C99 74 108 61 118 71 C128 61 137 74 118 87Z"/>
+          <path d="M192 87 C173 74 182 61 192 71 C202 61 211 74 192 87Z"/>
+        </g>
+        <ellipse class="c2" cx="155" cy="146" rx="78" ry="42"/>
+        <g class="blush" fill="#ff5f95"><circle cx="92" cy="142" r="11"/><circle cx="218" cy="142" r="11"/></g>
+        <ellipse cx="130" cy="128" rx="6" ry="8" fill="#c4527f"/><ellipse cx="180" cy="128" rx="6" ry="8" fill="#c4527f"/>
+        <g class="mouth"><ellipse cx="155" cy="162" rx="26" ry="12" fill="#b03060"/><ellipse class="tongue" cx="155" cy="168" rx="14" ry="5" fill="#ff7a9a"/></g>
+        <path d="M95 262 Q155 314 215 262 Z" fill="#fff" stroke="#e8a0c0" stroke-width="2"/>
+        <ellipse cx="155" cy="262" rx="60" ry="9" fill="#ffd9a0"/>
+        <g class="arm">
+          <path d="M168 168 Q192 212 160 258 M176 172 Q200 214 174 258" stroke="#fffbe6" stroke-width="5" fill="none" stroke-linecap="round"/>
+          <ellipse class="c1" cx="240" cy="222" rx="17" ry="30" transform="rotate(25 240 222)"/>
+          <circle class="c1" cx="224" cy="196" r="13"/>
+          <line x1="224" y1="196" x2="166" y2="164" stroke="#a8652a" stroke-width="4" stroke-linecap="round"/>
+          <line x1="230" y1="200" x2="176" y2="172" stroke="#a8652a" stroke-width="4" stroke-linecap="round"/>
+        </g>
+        <g class="fx" stroke="#ffb400" stroke-width="3.5" stroke-linecap="round">
+          <path d="M36 70L52 78M30 108L48 108M36 146L52 138M274 70L258 78M280 108L262 108M274 146L258 138"/>
+        </g>
+      </svg>
+    </div>
+  </div>
+  <div class="say" id="say">もぐもぐ…</div>
+  <button id="press">今だ!</button>
+</section>
+
+<section id="s3" class="screen" hidden>
+  <div class="big" id="face"></div>
+  <div class="res" id="res"></div>
+  <div class="preview" id="preview"></div>
+  <button class="x" id="post">Xにポストする</button>
+  <button class="sec" id="retry">もう一回あそぶ</button>
+</section>
+
+<script>
+(function(){
+  var $=function(i){return document.getElementById(i)};
+  var name="",fav="",timer=null,on=false,over=false,postText="";
+
+  function show(id){
+    ["s1","s2","s3"].forEach(function(s){$(s).hidden=(s!==id)});
+  }
+
+  function hearts(){
+    var st=$("stage");
+    for(var i=0;i<5;i++){
+      var h=document.createElement("span");
+      h.className="heart";
+      h.textContent=["💗","💕","✨","💖","❤"][i%5];
+      h.style.left=(10+Math.random()*75)+"%";
+      h.style.top=(35+Math.random()*35)+"%";
+      st.appendChild(h);
+      setTimeout(function(el){return function(){el.remove()}}(h),1000);
+    }
+  }
+
+  function setPleasure(v){
+    on=v;
+    $("hippo").classList.toggle("pleasure",v);
+    $("stage").classList.toggle("hot",v);
+    $("say").textContent=v?"あぁん❤ 気持ちいい!":"もぐもぐ…";
+    if(v)hearts();
+  }
+
+  function cycle(){
+    var wait=1200+Math.random()*2800;
+    timer=setTimeout(function(){
+      setPleasure(true);
+      timer=setTimeout(function(){
+        setPleasure(false);
+        cycle();
+      },500);
+    },wait);
+  }
+
+  function startGame(){
+    var n=$("name").value.trim(),f=$("fav").value.trim();
+    if(!n||!f){$("hint").textContent="名前と好きなものを入力してね!";return}
+    $("hint").textContent="";
+    name=n;fav=f;over=false;on=false;
+    setPleasure(false);
+    show("s2");
+    clearTimeout(timer);
+    cycle();
+  }
+
+  function press(){
+    if(over)return;
+    over=true;
+    clearTimeout(timer);
+    var ok=on;
+    setPleasure(false);
+    var result=ok?"うどん気持ちいい":"気持ちよくない";
+    $("face").textContent=ok?"🦛💖":"🦛💦";
+    var r=$("res");
+    r.textContent=result;
+    r.className="res"+(ok?"":" ng");
+    postText="My name is "+name+"\nDo you like "+fav+"?\nMy name is "+fav+" My name is "+fav+" chu☆\nあぁん…❤"+result;
+    $("preview").textContent=postText;
+    show("s3");
+  }
+
+  function post(){
+    var url="https://twitter.com/intent/tweet?text="+encodeURIComponent(postText);
+    var a=document.createElement("a");
+    a.href=url;a.target="_blank";a.rel="noopener noreferrer";
+    document.body.appendChild(a);a.click();a.remove();
+  }
+
+  $("start").addEventListener("click",startGame);
+  $("press").addEventListener("pointerdown",function(e){e.preventDefault();press()});
+  $("post").addEventListener("click",post);
+  $("retry").addEventListener("click",function(){show("s1")});
+})();
+</script>
+</body>
+</html>
